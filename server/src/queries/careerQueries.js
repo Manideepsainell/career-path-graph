@@ -53,3 +53,14 @@ export const connectedCompaniesQuery = `
     count(DISTINCT skill) AS matchedSkills
   ORDER BY matchedSkills DESC, company
 `;
+export const profilesQuery = `
+  MATCH (p:Person)
+  RETURN p.id AS id, p.name AS name
+  ORDER BY p.name
+`;
+
+export const rolesQuery = `
+  MATCH (r:Role)
+  RETURN r.id AS id, r.title AS title
+  ORDER BY r.title
+`;

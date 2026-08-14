@@ -3,8 +3,32 @@ import {
   getCareerPath,
   getConnectedRoles,
   getConnectedCompanies,
+  getProfiles,
+  getRoles,
 } from "../services/careerService.js";
+export const profiles = async (req, res, next) => {
+  try {
+    const results = await getProfiles();
 
+    res.json({
+      profiles: results,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const roles = async (req, res, next) => {
+  try {
+    const results = await getRoles();
+
+    res.json({
+      roles: results,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const skillGap = async (req, res, next) => {
   try {
     const { personId, roleId } = req.params;

@@ -5,8 +5,38 @@ import {
   careerPathQuery,
   connectedRolesQuery,
   connectedCompaniesQuery,
+  profilesQuery,
+  rolesQuery,
 } from "../queries/careerQueries.js";
+export const getProfiles = async () => {
+  const session = driver.session();
 
+  try {
+    const result = await session.run(profilesQuery);
+
+    return result.records.map((record) => ({
+      id: record.get("id"),
+      name: record.get("name"),
+    }));
+  } finally {
+    await session.close();
+  }
+};
+
+export const getRoles = async () => {
+  const session = driver.session();
+
+  try {
+    const result = await session.run(rolesQuery);
+
+    return result.records.map((record) => ({
+      id: record.get("id"),
+      title: record.get("title"),
+    }));
+  } finally {
+    await session.close();
+  }
+};
 export const getSkillGap = async (personId, roleId) => {
   const session = driver.session();
 
