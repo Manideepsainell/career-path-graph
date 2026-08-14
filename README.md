@@ -1,8 +1,6 @@
-
-````md
 # Career Path Explorer
 
-A graph-based career exploration application built with **Node.js, React, CognoDB, and the official Neo4j JavaScript driver**.
+A graph-based career exploration application built with **React, Node.js, Express, CognoDB, and the official Neo4j JavaScript driver**.
 
 The application helps users understand how their current skills connect to roles, career paths, and companies.
 
@@ -18,7 +16,7 @@ The application then shows:
 
 1. Skills they already have
 2. Skills missing for the target role
-3. A career path between their current and target roles
+3. A possible career progression between roles
 4. Roles connected to their existing skills
 5. Companies connected to those roles
 
@@ -31,17 +29,17 @@ For example:
 ```text
 Person
   └── HAS_SKILL → Skill
-                       └── REQUIRED_BY → Role
-                                            └── OFFERED_BY → Company
+                       └── REQUIRES ← Role
+                                      └── OFFERED_BY → Company
 
 Role
   └── LEADS_TO → Role
                     └── LEADS_TO → Role
-````
+```
 
-A graph database makes traversing these relationships directly natural.
+A graph database makes these multi-hop relationships natural to traverse.
 
-The application uses multi-hop traversal to find career paths such as:
+For example:
 
 ```text
 Frontend Developer
@@ -55,18 +53,18 @@ Backend Engineer
 
 ### Nodes
 
-* `Person`
-* `Skill`
-* `Role`
-* `Company`
+- `Person`
+- `Skill`
+- `Role`
+- `Company`
 
 ### Relationships
 
-* `HAS_SKILL`
-* `REQUIRES`
-* `RELATED_TO`
-* `LEADS_TO`
-* `OFFERED_BY`
+- `HAS_SKILL`
+- `REQUIRES`
+- `RELATED_TO`
+- `LEADS_TO`
+- `OFFERED_BY`
 
 ### Diagram
 
@@ -75,7 +73,7 @@ graph LR
     Person[Person] -->|HAS_SKILL| Skill[Skill]
     Role[Role] -->|REQUIRES| Skill
     Skill -->|RELATED_TO| Skill
-    Role -->|LEADS_TO| NextRole[Role]
+    Role[Role] -->|LEADS_TO| NextRole[Role]
     Role -->|OFFERED_BY| Company[Company]
 ```
 
@@ -87,12 +85,12 @@ Compares a person's skills with the skills required by a target role.
 
 Returns:
 
-* Matched skills
-* Missing skills
+- Matched skills
+- Missing skills
 
 ### Career Path
 
-Finds a path between two roles using `LEADS_TO` relationships.
+Finds a possible progression between two roles using `LEADS_TO` relationships.
 
 Example:
 
@@ -117,7 +115,7 @@ Person
 → Company
 ```
 
-to find companies connected to the person's current skill set.
+to find companies connected to the person's skill set.
 
 ## Project Structure
 
@@ -125,8 +123,7 @@ to find companies connected to the person's current skill set.
 career-path-graph/
 ├── server/
 │   ├── scripts/
-│   │   ├── seed.js
-│   │   └── ...
+│   │   └── seed.js
 │   └── src/
 │       ├── config/
 │       ├── controllers/
@@ -138,25 +135,27 @@ career-path-graph/
 ├── client/
 │   └── src/
 │
+├── Screenshots/
+│
 └── README.md
 ```
 
 ## Tech Stack
 
-* React
-* Node.js
-* Express
-* CognoDB
-* Neo4j JavaScript Driver
-* Cypher
-* Vite
+- React
+- Node.js
+- Express
+- CognoDB
+- Neo4j JavaScript Driver
+- Cypher
+- Vite
 
 ## Setup
 
 ### 1. Clone the repository
 
 ```bash
-git clone <REPOSITORY_URL>
+git clone https://github.com/Manideepsainell/career-path-graph.git
 cd career-path-graph
 ```
 
@@ -188,13 +187,24 @@ node scripts/seed.js
 npm run dev
 ```
 
-### 5. Start the frontend
+### 5. Configure the frontend
 
 Open another terminal:
 
 ```bash
 cd client
 npm install
+```
+
+Create a `.env` file:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+### 6. Start the frontend
+
+```bash
 npm run dev
 ```
 
@@ -208,31 +218,34 @@ http://localhost:5173
 
 The seed script creates:
 
-* 5 people
-* 24 skills
-* 8 roles
-* 6 companies
+- 5 people
+- 24 skills
+- 8 roles
+- 6 companies
 
-and the relationships connecting them.
+along with the relationships connecting them.
 
 ## Screenshots
 
 ### Career Explorer
 
-*Add screenshot here.*
+![Career Explorer](./Screenshots/career-explorer.png)
 
-### Skill Gap and Career Path
+### Skill Gap and Career Connections
 
-*Add screenshot here.*
+![Skill Gap and Career Connections](./Screenshots/career-path.png)
 
 ## Demo
 
-Hosted application:
+**Live Demo:**  
+https://career-path-graph-seven.vercel.app/
 
-`<DEMO_URL>`
+**Backend:**  
+https://career-path-graph.onrender.com/
+
+**Repository:**  
+https://github.com/Manideepsainell/career-path-graph
 
 ## Author
 
 Manideep Sai Nellutla
-
-````
