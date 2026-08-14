@@ -6,8 +6,9 @@ function App() {
   const [profiles, setProfiles] = useState([]);
   const [roles, setRoles] = useState([]);
 
-  const [selectedProfile, setSelectedProfile] = useState("");
-  const [selectedRole, setSelectedRole] = useState("");
+const [selectedProfile, setSelectedProfile] = useState("");
+const [selectedCurrentRole, setSelectedCurrentRole] = useState("");
+const [selectedRole, setSelectedRole] = useState("");
 
   const [skillGap, setSkillGap] = useState(null);
   const [careerPath, setCareerPath] = useState(null);
@@ -39,16 +40,21 @@ function App() {
         if (profilesData.profiles.length > 0) {
           setSelectedProfile(profilesData.profiles[0].id);
         }
+const frontendRole = rolesData.roles.find(
+  (role) => role.id === "role-frontend"
+);
 
-        const backendRole = rolesData.roles.find(
-          (role) => role.id === "role-backend"
-        );
+const backendRole = rolesData.roles.find(
+  (role) => role.id === "role-backend"
+);
 
-        if (backendRole) {
-          setSelectedRole(backendRole.id);
-        } else if (rolesData.roles.length > 0) {
-          setSelectedRole(rolesData.roles[0].id);
-        }
+if (frontendRole) {
+  setSelectedCurrentRole(frontendRole.id);
+}
+
+if (backendRole) {
+  setSelectedRole(backendRole.id);
+}
       } catch (err) {
         setError(err.message);
       } finally {
@@ -60,9 +66,9 @@ function App() {
   }, []);
 
   const exploreCareer = async () => {
-    if (!selectedProfile || !selectedRole) {
-      return;
-    }
+    if (!selectedProfile || !selectedCurrentRole || !selectedRole) {
+  return;
+}
 
     setLoading(true);
     setError("");
@@ -77,9 +83,10 @@ function App() {
         fetch(
           `${API_URL}/profiles/${selectedProfile}/skill-gap/${selectedRole}`
         ),
-        fetch(
-          `${API_URL}/career-path?from=role-frontend&to=${selectedRole}`
-        ),
+       
+          fetch(
+  `${API_URL}/career-path?from=${selectedCurrentRole}&to=${selectedRole}`
+),
         fetch(`${API_URL}/profiles/${selectedProfile}/roles`),
         fetch(`${API_URL}/profiles/${selectedProfile}/companies`),
       ]);
@@ -158,7 +165,21 @@ function App() {
               ))}
             </select>
           </label>
-
+<label>
+  <span>Current role</span>
+  <select
+    value={selectedCurrentRole}
+    onChange={(event) =>
+      setSelectedCurrentRole(event.target.value)
+    }
+  >
+    {roles.map((role) => (
+      <option key={role.id} value={role.id}>
+        {role.title}
+      </option>
+    ))}
+  </select>
+</label>
           <label>
             <span>Target role</span>
             <select
